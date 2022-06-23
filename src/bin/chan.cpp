@@ -6,6 +6,13 @@ Chan::Chan()
     : http("https://a.4cdn.org/") {
 }
 
+/**
+ * @brief Gets the current threads from a given board
+ *
+ * @param board The board to get threads from
+ *
+ * @return A vector containing the thread numbers from the given board
+ */
 std::vector<int> Chan::get_threads(std::string board) {
     std::string threadlist_json = http.fetch_path(board + "/threads.json");
        
