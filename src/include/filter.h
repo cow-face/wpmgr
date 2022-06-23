@@ -40,12 +40,15 @@ public:
 	 *
 	 * @param reply The reply to be checked
 	 * @param aspect_ratio The aspect ratio to check against
-	 * @param epsilon Determines how strict aspect ratio comparisons should be
+	 * @param tolerance Determines how strict aspect ratio
+	 * comparisons should be. Given as a percentage of the
+	 * given aspect ratio (e.g. 0.1)
 	 *
-	 * @return True if the difference between the given aspect ratio and
-	 * the aspect ratio of the image are less than epsilon, false otherwise
+	 * @return True if the difference between the given aspect 
+	 * ratio and the aspect ratio of the image is less than the
+	 * absolute value of tolerance*aspect_ratio, false otherwise
 	 */
-	bool check_aspect_r(Chan::Reply reply, float aspect_ratio, float epsilon);
+	bool check_aspect_ratio(Chan::Reply reply, double aspect_ratio, double tolerance);
 
 	/**
 	 * @brief Checks the file extension of the image
@@ -59,3 +62,5 @@ public:
 	 */
 	bool check_file_ext(Chan::Reply reply, std::string extension);
 }
+
+#endif
