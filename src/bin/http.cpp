@@ -1,8 +1,17 @@
 #include <cstdio>
 #include <cstdlib>
+#include <iostream>
 
 #include "http.h"
 
+/**
+ * @brief Constructor for the HTTP class
+ * 
+ * @details Initializes the download buffer and cURL
+ *
+ * @param base_url The base url to which
+ * requests will be made
+ */
 HTTP::HTTP(std::string base_url) 
     : base_url(base_url) {
     HTTP::dl_buffer = nullptr;
@@ -30,6 +39,16 @@ size_t HTTP::write_callback(char* ptr, size_t size,
     return bytes;
 }
 
+/**
+ * @brief Fetches data from a given path
+ * 
+ * @details Also empties the download buffer to be used again
+ *
+ * @param path The url the data is to be 
+ * fetched from relative to the base path
+ *
+ * @return The data from the url
+ */
 std::string HTTP::fetch_path(std::string path) {
     CURLcode res;
     if (curl) {
@@ -42,10 +61,15 @@ std::string HTTP::fetch_path(std::string path) {
             fprintf(stderr, "curl_easy_perform() failed: %s\n",
                     curl_easy_strerror(res));
         /* always cleanup */
-        curl_easy_cleanup(curl);
+        //curl_easy_cleanup(curl);
     }
     std::string result((char*) HTTP::dl_buffer, HTTP::dl_buffer_size);
     free(HTTP::dl_buffer); // free on nullptr is nop
+    
     HTTP::dl_buffer = nullptr;
+    HTTP::dl_buffer_size = 0;
+ 
+    std::cout << "\n\n" << result << "\n\n";
+
     return result;
 }

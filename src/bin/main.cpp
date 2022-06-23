@@ -1,15 +1,20 @@
 #include <ncurses.h>
 #include <iostream>
-#include <nlohmann/json.hpp>
 
 #include "http.h"
 #include "chan.h"
 
 int main() {
     Chan fourchan;
+    
     std::vector<int> threads = fourchan.get_threads("w");
-    for (int i = 0; i < threads.size(); i++) {
-        std::cout << threads[i] << "\n";
+
+    std::vector<Chan::Reply> replies = fourchan.get_replies("w", threads[20]);
+
+    for (Chan::Reply reply : replies) {
+        std::cout << reply.no << "\n";
+        std::cout << reply.tim << reply.ext << "\n";
+        std::cout << reply.w << "x" << reply.h << "\n";
     }
 
     return 0;
