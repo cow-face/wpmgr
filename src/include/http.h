@@ -4,6 +4,7 @@
 #include <string>
 
 #include <cstdint>
+#include <ctime>
 
 #include <curl/curl.h>
 
@@ -12,10 +13,22 @@ private:
     std::string base_url;
     CURL* curl;
 
+    // Static functions for cURL
     inline static uint8_t* dl_buffer;
     inline static size_t dl_buffer_size;
     static size_t write_callback(char *ptr, size_t size, 
                           size_t nmemb, void *userdata);
+
+    bool cache_initialized = false;
+    void initialize_cache();
+    std::time_t check_cache(std::string path);
+    bool is_stale(std::string path, const std::time_t cache_timestamp);
+    std::string fetch_http(std::string path);
+    std::string fetch_cache(std::string path);
+    void save_cache(std::string path, std::string contents);
+
+    const std::string cache_dir = "/tmp/wpmgr";
+
 public:
     /**
     * @brief Constructor for the HTTP class
