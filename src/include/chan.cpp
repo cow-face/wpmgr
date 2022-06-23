@@ -1,13 +1,13 @@
-#include <ncurses.h>
-#include <iostream>
-#include <nlohmann/json.hpp>
+#include "chan.h"
 
-#include "http.h"
+Chan::Chan() {
+    HTTP http("https://a.4cdn.org/");
+}
 
-int main() {
-    HTTP http("https://a.4cdn.org/w/");
+std::vector<int> get_threads(std::string board) {
+
     std::string threadlist_json = http.fetch_path("threads.json");
-    
+        
     auto json_response = nlohmann::json::parse(threadlist_json);
 
     for (int page = 0; page < json_response.size(); page++) {
@@ -18,6 +18,4 @@ int main() {
             std::cout << cur_thread["no"] << "\n";
         }
     }
-
-    return 0;
 }

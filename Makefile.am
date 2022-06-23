@@ -1,8 +1,9 @@
-AM_CPPFLAGS = -I$(top_srcdir)/src/include
+AM_CPPFLAGS = -I$(top_srcdir)/src/include \
+			  -I/usr/include
 
-bin_PROGRAMS = src/bin/wpmgr
-src_bin_wpmgr_SOURCES = \
+bin_PROGRAMS = wpmgr
+wpmgr_SOURCES = \
 	src/bin/http.cpp \
 	src/bin/main.cpp
-src_bin_wpmgr_LDADD = -ltinfo -lncurses -lcurl
-src_bin_wpmgr_CFLAGS = -Werror -Wall
+wpmgr_LDADD = -ltinfo -lncurses -lcurl
+wpmgr_CFLAGS = -Werror -Wall
