@@ -8,7 +8,7 @@
 /**
  * @brief A class for filtering 4chan replies by criteria
  */
-class filter {
+class Filter {
 private:
 
 public:
@@ -19,7 +19,7 @@ public:
 	 *
 	 * @return True if the reply contains an image, false if it does not
 	 */
-	bool check_if_image(Chan::Reply reply);
+	bool has_image(Chan::Reply reply);
 
 	/**
 	 * @brief Checks if the resolution of the image attached
