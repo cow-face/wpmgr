@@ -41,19 +41,19 @@ std::vector<Reply> Chan::get_replies(std::string board, int thread_id) {
     auto json_response = nlohmann::json::parse(reply_list_json);
     
     for (auto reply : json_response["posts"]) {
-        int no = reply["no"];
         // Parsing for the value 'tim' is weird for some reason
         // It needs to be coerced into a uint64_t
         uint64_t tim;
         if (reply["tim"] != nullptr)
             tim = reply["tim"].get<uint64_t>();
-        int w = reply.value("w", 0);
-        int h = reply.value("h", 0);
-        std::string filename = reply.value("filename", "");
-        std::string ext = reply.value("ext", "");
-        int fsize = reply.value("fsize", 0);
 
-        Reply reply_struct(no, tim, w, h, filename, ext, fsize);
+        Reply reply_struct(reply["no"],
+        tim,
+        reply.value("w", 0), 
+        reply.value("h", 0), 
+        reply.value("filename", ""), 
+        reply.value("ext", ""), 
+        reply.value("fsize", 0));
 
         replies.push_back(reply_struct);
     }
@@ -61,9 +61,14 @@ std::vector<Reply> Chan::get_replies(std::string board, int thread_id) {
     return replies;
 }
 
-Reply::Reply(int no, uint64_t tim, int w, int h, std::string filename,
-std::string ext, int fsize):no(no), tim(tim), w(w),
-h(h), filename(filename), ext(ext), fsize(fsize) {
+Reply::Reply(int no, uint64_t tim, int w, int h, std::string filename, std::string ext, int fsize)
+    : no(no),
+    tim(tim),
+    w(w),
+    h(h), 
+    filename(filename), 
+    ext(ext), 
+    fsize(fsize) {
 
 }
 
