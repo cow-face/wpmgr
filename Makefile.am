@@ -4,6 +4,7 @@ AM_CPPFLAGS = -I$(top_srcdir)/src/include \
 bin_PROGRAMS = wpmgr
 wpmgr_SOURCES = \
 	src/bin/http.cpp \
+	src/bin/chan.cpp \
 	src/bin/main.cpp
 wpmgr_LDADD = -ltinfo -lncurses -lcurl
 wpmgr_CFLAGS = -Werror -Wall
