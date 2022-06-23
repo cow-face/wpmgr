@@ -61,6 +61,6 @@ public:
 	 * file extension of the attached image, false otherwise
 	 */
 	bool check_file_ext(Chan::Reply reply, std::string extension);
-}
+};
 
 #endif
