@@ -6,10 +6,10 @@
 /**
  * @brief Constructor for the HTTP class
  * 
- * @details Initializes the download buffer and curl
+ * @details Initializes the download buffer and cURL
  *
- * @param base_url The base url data is to be 
- * fetched from (without subdirectories)
+ * @param base_url The base url to which
+ * requests will be made
  */
 HTTP::HTTP(std::string base_url) 
     : base_url(base_url) {
@@ -18,7 +18,6 @@ HTTP::HTTP(std::string base_url)
     curl_global_init(CURL_GLOBAL_DEFAULT);
     curl = curl_easy_init();    
 }
-
 
 size_t HTTP::write_callback(char* ptr, size_t size,
                             size_t nmemb, void* userdata) {
@@ -44,7 +43,8 @@ size_t HTTP::write_callback(char* ptr, size_t size,
  * 
  * @details Also empties the download buffer to be used again
  *
- * @param path The url the data is to be fetched from
+ * @param path The url the data is to be 
+ * fetched from relative to the base path
  *
  * @return The data from the url
  */
