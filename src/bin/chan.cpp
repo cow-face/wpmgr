@@ -41,11 +41,15 @@ std::vector<Chan::Reply> Chan::get_replies(std::string board, int thread_id) {
     auto json_response = nlohmann::json::parse(reply_list_json);
     
     for (auto reply : json_response["posts"]) {
-        Reply reply_struct = { 0 };
+        Chan::Reply reply_struct = { 0 };
         reply_struct.no = reply["no"];
-        reply_struct.tim = reply.value("tim", 0);
+        // Parsing for the value 'tim' is weird for some reason
+        // It needs to be coerced into a uint64_t
+        if (reply["tim"] != nullptr)
+            reply_struct.tim = reply["tim"].get<uint64_t>();
         reply_struct.w = reply.value("w", 0);
         reply_struct.h = reply.value("h", 0);
+        reply_struct.filename = reply.value("filename", "");
         reply_struct.ext = reply.value("ext", "");
         reply_struct.fsize = reply.value("fsize", 0);
 

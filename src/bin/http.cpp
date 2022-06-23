@@ -68,6 +68,8 @@ std::string HTTP::fetch_path(std::string path) {
     
     HTTP::dl_buffer = nullptr;
     HTTP::dl_buffer_size = 0;
-    
+ 
+    std::cout << "\n\n" << result << "\n\n";
+
     return result;
 }

@@ -6,6 +6,8 @@
 #include <vector>
 #include <string>
 
+#include <cstdint>
+
 class Chan {
 private:
     HTTP http;
@@ -17,9 +19,10 @@ public:
      */
     struct Reply {
         int no;
-        unsigned int tim;
+        uint64_t tim;
         int w;
         int h;
+        std::string filename;
         std::string ext;
         int fsize;
     };
