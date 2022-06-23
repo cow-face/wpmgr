@@ -5,6 +5,7 @@ bin_PROGRAMS = wpmgr
 wpmgr_SOURCES = \
 	src/bin/http.cpp \
 	src/bin/chan.cpp \
+	src/bin/ui.cpp \
 	src/bin/main.cpp
-wpmgr_LDADD = -ltinfo -lncurses -lcurl
+wpmgr_LDADD = -ltinfo -lncurses -lmenu -lcurl
 wpmgr_CFLAGS = -Werror -Wall
