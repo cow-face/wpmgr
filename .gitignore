@@ -59,15 +59,7 @@ build/
 wpmgr
 
 # Automake BS
-AUTHORS
-ChangeLog
-NEWS
-README
 config.h
-
-# YouCompleteMe
-.ycm_extra_conf.py
-compile_commands.json
 
 # Vim
 *.swp
