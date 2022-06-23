@@ -43,7 +43,7 @@ std::vector<Reply> Chan::get_replies(std::string board, int thread_id) {
     for (auto reply : json_response["posts"]) {
         // Parsing for the value 'tim' is weird for some reason
         // It needs to be coerced into a uint64_t
-        uint64_t tim;
+        uint64_t tim = 0;
         if (reply["tim"] != nullptr)
             tim = reply["tim"].get<uint64_t>();
 
