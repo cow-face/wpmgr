@@ -3,7 +3,14 @@
 
 #include "http.h"
 
-
+/**
+ * @brief Constructor for the HTTP class
+ * 
+ * @details Initializes the download buffer and curl
+ *
+ * @param base_url The base url data is to be 
+ * fetched from (without subdirectories)
+ */
 HTTP::HTTP(std::string base_url) 
     : base_url(base_url) {
     HTTP::dl_buffer = nullptr;
