@@ -48,12 +48,12 @@ std::vector<Reply> Chan::get_replies(std::string board, int thread_id) {
             tim = reply["tim"].get<uint64_t>();
 
         Reply reply_struct(reply["no"],
-        tim,
-        reply.value("w", 0), 
-        reply.value("h", 0), 
-        reply.value("filename", ""), 
-        reply.value("ext", ""), 
-        reply.value("fsize", 0));
+                           tim,
+                           reply.value("w", 0), 
+                           reply.value("h", 0), 
+                           reply.value("filename", ""), 
+                           reply.value("ext", ""), 
+                           reply.value("fsize", 0));
 
         replies.push_back(reply_struct);
     }
