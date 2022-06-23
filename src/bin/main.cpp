@@ -9,12 +9,9 @@ int main() {
     
     std::vector<int> threads = fourchan.get_threads("w");
 
-    std::vector<Chan::Reply> replies = fourchan.get_replies("w", threads[20]);
-
-    for (Chan::Reply reply : replies) {
-        std::cout << reply.no << "\n";
-        std::cout << reply.tim << reply.ext << "\n";
-        std::cout << reply.w << "x" << reply.h << "\n";
+    std::vector<std::string> thread_strs;
+    for (int thread : threads) {
+        thread_strs.push_back(std::to_string(thread));
     }
 
     return 0;
