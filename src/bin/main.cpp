@@ -7,9 +7,14 @@
 
 int main() {
     Chan fourchan;
+    
     std::vector<int> threads = fourchan.get_threads("w");
-    for (int i = 0; i < threads.size(); i++) {
-        std::cout << threads[i] << "\n";
+
+    std::vector<Chan::Reply> replies = fourchan.get_replies("w", threads[20]);
+
+    for (Chan::Reply reply : replies) {
+        std::cout << reply.no << "\n";
+        std::cout << reply.tim << "\n";
     }
 
     return 0;

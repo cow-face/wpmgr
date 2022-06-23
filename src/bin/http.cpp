@@ -1,5 +1,6 @@
 #include <cstdio>
 #include <cstdlib>
+#include <iostream>
 
 #include "http.h"
 
@@ -42,10 +43,13 @@ std::string HTTP::fetch_path(std::string path) {
             fprintf(stderr, "curl_easy_perform() failed: %s\n",
                     curl_easy_strerror(res));
         /* always cleanup */
-        curl_easy_cleanup(curl);
+        //curl_easy_cleanup(curl);
     }
     std::string result((char*) HTTP::dl_buffer, HTTP::dl_buffer_size);
     free(HTTP::dl_buffer); // free on nullptr is nop
+    
     HTTP::dl_buffer = nullptr;
+    HTTP::dl_buffer_size = 0;
+    
     return result;
 }

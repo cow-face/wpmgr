@@ -23,3 +23,27 @@ std::vector<int> Chan::get_threads(std::string board) {
 
     return threads;
 }
+
+std::vector<Chan::Reply> Chan::get_replies(std::string board, int thread_id) {
+    std::string reply_list_json = 
+                http.fetch_path(board + "/thread/" +
+                std::to_string(thread_id) + ".json");
+
+    std::vector<Chan::Reply> replies;
+
+    auto json_response = nlohmann::json::parse(reply_list_json);
+    
+    for (auto reply : json_response["posts"]) {
+        Reply reply_struct = { 0 };
+        reply_struct.no = reply["no"];
+        reply_struct.tim = reply.value("tim", 0);
+        reply_struct.w = reply.value("w", 0);
+        reply_struct.h = reply.value("h", 0);
+        reply_struct.ext = reply.value("ext", "");
+        reply_struct.fsize = reply.value("fsize", 0);
+
+        replies.push_back(reply_struct);
+    }
+
+    return replies;
+}

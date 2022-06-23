@@ -12,14 +12,17 @@ private:
 public:
     Chan();
 
-    /**
-     * @breif Gets the current threads from a given board
-     *
-     * @param board The board to get threads from
-     *
-     * @return A vector containing the thread numbers from the given board
-     */
+    struct Reply {
+        int no;
+        unsigned int tim;
+        int w;
+        int h;
+        std::string ext;
+        int fsize;
+    };
+
     std::vector<int> get_threads(std::string board);
+    std::vector<Reply> get_replies(std::string board, int thread_id);
 };
 
 #endif
