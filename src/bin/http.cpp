@@ -3,6 +3,7 @@
 
 #include "http.h"
 
+
 HTTP::HTTP(std::string base_url) 
     : base_url(base_url) {
     HTTP::dl_buffer = nullptr;
@@ -10,6 +11,7 @@ HTTP::HTTP(std::string base_url)
     curl_global_init(CURL_GLOBAL_DEFAULT);
     curl = curl_easy_init();    
 }
+
 
 size_t HTTP::write_callback(char* ptr, size_t size,
                             size_t nmemb, void* userdata) {
@@ -30,6 +32,15 @@ size_t HTTP::write_callback(char* ptr, size_t size,
     return bytes;
 }
 
+/**
+ * @brief Fetches data from a given path
+ * 
+ * @details Also empties the download buffer to be used again
+ *
+ * @param path The url the data is to be fetched from
+ *
+ * @return The data from the url
+ */
 std::string HTTP::fetch_path(std::string path) {
     CURLcode res;
     if (curl) {
