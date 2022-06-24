@@ -8,4 +8,4 @@ wpmgr_SOURCES = \
 	src/bin/ui.cpp \
 	src/bin/main.cpp
 wpmgr_LDADD = -ltinfo -lncurses -lmenu -lcurl
-wpmgr_CXXFLAGS = -Werror -Wall
+wpmgr_CXXFLAGS = -std=c++17 -Werror -Wall
