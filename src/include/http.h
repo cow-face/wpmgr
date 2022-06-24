@@ -4,6 +4,7 @@
 #include <string>
 
 #include <cstdint>
+#include <ctime>
 
 #include <curl/curl.h>
 
@@ -12,10 +13,76 @@ private:
     std::string base_url;
     CURL* curl;
 
+    // Static functions for cURL
     inline static uint8_t* dl_buffer;
     inline static size_t dl_buffer_size;
+    /**
+     * @brief Callback for cURL to provided downloaded data
+     * 
+     * @param ptr Pointer to buffer containing data
+     * @param size Size of data buffer elements
+     * @param nmemb Number of elements in data buffer
+     * @param userdata Unused
+     * @return size_t Number of bytes read
+     */
     static size_t write_callback(char *ptr, size_t size, 
                           size_t nmemb, void *userdata);
+
+    
+    bool cache_initialized = false;
+
+    /**
+     * @brief Create cache directories if needed
+     */
+    void initialize_cache();
+    /**
+     * @brief Check to see if the cache contains a file
+     * 
+     * @param path Path relative to the base URL
+     * @return std::time_t Last modified timestamp if cache file exists,
+     * otherwise 0
+     */
+    std::time_t check_cache(std::string path);
+    /**
+     * @brief Update on-disk cache if it is stale (per HTTP)
+     * 
+     * @param path Path relative to the base URL
+     * @param cache_timestamp Timestamp of on-disk cache
+     * @return true if cache is stale and was updated,
+     * otherwise false
+     */
+    bool fetch_if_stale(std::string path, const std::time_t cache_timestamp);
+    /**
+     * @brief Perform the actual HTTP request to get data
+     * 
+     * @param path Path relative to the base URL
+     * @return std::string Data received from HTTP request
+     */
+    std::string fetch_http(std::string path);
+    /**
+     * @brief Fetch cached data from disk
+     * 
+     * @param path Path relative to the base URL
+     * @return std::string Data read from cache
+     */
+    std::string fetch_cache(std::string path);
+    /**
+     * @brief Cache requested data to disk
+     * 
+     * @param path Path relative to the base URL
+     * @param contents Dataq to store in cache
+     */
+    void save_cache(std::string path, std::string contents);
+    /**
+     * @brief Convert Unix timestamp to format that can be used in HTTP
+     * 
+     * @param time Unix timestamp
+     * @return std::string Formatted time
+     */
+    std::string unix_time_to_http(std::time_t time);
+
+    const std::string cache_dir = "/tmp/wpmgr";
+
 public:
     /**
     * @brief Constructor for the HTTP class

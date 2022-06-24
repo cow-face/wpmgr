@@ -21,7 +21,8 @@ private:
     std::string ext;
     int fsize;
 public:
-    Reply(int no, uint64_t tim, int w, int h, std::string filename, std::string ext, int fsize);
+    Reply(int no, uint64_t tim, int w, int h, std::string filename, 
+          std::string ext, int fsize);
     /**
      * @brief Checks if the given reply contains an image
      *

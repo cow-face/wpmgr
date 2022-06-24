@@ -11,13 +11,16 @@ int main() {
     std::vector<std::string> thread_strs;
     for (int thread : threads) {
         thread_strs.push_back(std::to_string(thread));
+        fourchan.get_replies("w", thread);
     }
-
+    
+    /*
     UI::setup_ui();
     UI::setup_menu(thread_strs);
     UI::draw_menu();
     UI::destroy_menu();
     UI::destroy_ui();
+    */
 
     return 0;
 }
