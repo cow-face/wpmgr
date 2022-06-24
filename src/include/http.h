@@ -44,14 +44,14 @@ private:
      */
     std::time_t check_cache(std::string path);
     /**
-     * @brief Check if on-disk cache is stale via HTTP request
+     * @brief Update on-disk cache if it is stale (per HTTP)
      * 
      * @param path Path relative to the base URL
      * @param cache_timestamp Timestamp of on-disk cache
-     * @return true if cache is stale and must be updated,
+     * @return true if cache is stale and was updated,
      * otherwise false
      */
-    bool is_stale(std::string path, const std::time_t cache_timestamp);
+    bool fetch_if_stale(std::string path, const std::time_t cache_timestamp);
     /**
      * @brief Perform the actual HTTP request to get data
      * 

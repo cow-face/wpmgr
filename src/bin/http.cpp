@@ -1,10 +1,13 @@
 #include <cstdio>
 #include <cstdlib>
-#include <iostream>
-
+#include <ctime>
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <unistd.h>
+#include <iostream>
+#include <sstream>
+#include <string>
+#include <fstream>
 
 #include "http.h"
 
@@ -51,13 +54,17 @@ void HTTP::initialize_cache() {
         mkdir(board_cache_dir.c_str(), 0755);
     }
 
+    const std::string thread_cache_dir = board_cache_dir + "/thread";
+    if (stat(thread_cache_dir.c_str(), &st) == -1) {
+        mkdir(thread_cache_dir.c_str(), 0755);
+    }
+
     cache_initialized = true;
 }
 
 std::time_t HTTP::check_cache(std::string path) {
     struct stat st = { 0 };
     const std::string cache_file_path = cache_dir + "/" + path; 
-    std::cout << cache_file_path << "\n";
     if (stat(cache_file_path.c_str(), &st) == -1) {
         return 0; 
     }
@@ -65,24 +72,83 @@ std::time_t HTTP::check_cache(std::string path) {
     return (std::time_t) st.st_mtim.tv_sec;
 }
 
-bool HTTP::is_stale(std::string path, const std::time_t cache_timestamp) {
-    // TODO: check via http if cache timestamp is stale
-    return true;
+bool HTTP::fetch_if_stale(std::string path, const std::time_t cache_timestamp) {
+    const std::string http_header = "If-Modified-Since: " +
+                                    unix_time_to_http(cache_timestamp);
+    const std::string full_path = base_url + path;
+
+    CURLcode res;
+    long response_code;
+
+    if(curl) {
+        struct curl_slist *chunk = NULL;
+        chunk = curl_slist_append(chunk, http_header.c_str());
+
+        curl_easy_setopt(curl, CURLOPT_HTTPHEADER, chunk);
+        curl_easy_setopt(curl, CURLOPT_URL, full_path.c_str());
+        curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, HTTP::write_callback);
+        //curl_easy_setopt(curl, CURLOPT_VERBOSE, 1L);
+    
+        res = curl_easy_perform(curl);
+
+        /* Check for errors */
+        if(res != CURLE_OK) {
+            // cURL error...
+            response_code = 0;
+        }
+        else {
+            curl_easy_getinfo(curl, CURLINFO_RESPONSE_CODE, &response_code);
+        }
+
+        /* always cleanup */
+        // TODO: fix segfault
+        //curl_easy_cleanup(curl);
+ 
+        /* free the custom headers */
+        curl_slist_free_all(chunk);
+    }
+
+    std::string result((char*) HTTP::dl_buffer, HTTP::dl_buffer_size);
+    free(HTTP::dl_buffer); // free on nullptr is nop
+    
+    HTTP::dl_buffer = nullptr;
+    HTTP::dl_buffer_size = 0;
+
+    if (response_code == 200) {
+        save_cache(path, result);
+        return true;
+    }
+
+    return false;
 }
 
 std::string HTTP::fetch_cache(std::string path) {
-    // TODO: fetch cache off disk
-    return "";
+    std::string full_path = cache_dir + "/" + path;
+    std::cout << "Reading cache from " << full_path << "\n";
+    std::ifstream t(full_path);
+    std::stringstream buffer;
+    buffer << t.rdbuf();
+
+    return buffer.str();
 }
 
 void HTTP::save_cache(std::string path, std::string contents) {
-    // TODO: save response to disk
-    return;
+    const std::string full_path = cache_dir + "/" + path;
+    std::cout << "Writing cache to " << full_path << "\n";
+    std::ofstream out(full_path);
+    out << contents;
+    out.close();
 }
 
-std::string HTTP::unix_time_to_http(std::time_t time) {
-    // TODO: Convert unix timestamp to HTTP time
-    return "Wed, 21 Oct 2015 07:28:00 GMT";
+std::string HTTP::unix_time_to_http(const std::time_t time) {
+    std::tm* broken_time = gmtime(&time);
+    std::string formatted_time = "";
+
+    char str_buffer[250];
+    strftime(str_buffer, 250, "%a, %d %b %Y %T %Z", broken_time);
+    std::string cpp_str = str_buffer;
+
+    return cpp_str;
 }
 
 std::string HTTP::fetch_http(std::string path) {
@@ -114,14 +180,7 @@ std::string HTTP::fetch_path(std::string path) {
         initialize_cache();
 
     const std::time_t cache_timestamp = check_cache(path);
-   
-    std::cout << cache_timestamp << "\n";
 
-    if (is_stale(path, cache_timestamp)) {
-        std::string result = fetch_http(path);
-        save_cache(path, result);
-        return result;
-    }
-    
+    fetch_if_stale(path, cache_timestamp);
     return fetch_cache(path);
 }

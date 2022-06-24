@@ -11,6 +11,7 @@ int main() {
     std::vector<std::string> thread_strs;
     for (int thread : threads) {
         thread_strs.push_back(std::to_string(thread));
+        fourchan.get_replies("w", thread);
     }
     
     /*
