@@ -73,6 +73,13 @@ private:
      * @param contents Dataq to store in cache
      */
     void save_cache(std::string path, std::string contents);
+    /**
+     * @brief Convert Unix timestamp to format that can be used in HTTP
+     * 
+     * @param time Unix timestamp
+     * @return std::string Formatted time
+     */
+    std::string unix_time_to_http(std::time_t time);
 
     const std::string cache_dir = "/tmp/wpmgr";
 

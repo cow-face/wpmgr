@@ -80,6 +80,11 @@ void HTTP::save_cache(std::string path, std::string contents) {
     return;
 }
 
+std::string HTTP::unix_time_to_http(std::time_t time) {
+    // TODO: Convert unix timestamp to HTTP time
+    return "Wed, 21 Oct 2015 07:28:00 GMT";
+}
+
 std::string HTTP::fetch_http(std::string path) {
     CURLcode res;
     if (curl) {
