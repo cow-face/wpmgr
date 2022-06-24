@@ -24,7 +24,7 @@ size_t HTTP::write_callback(char* ptr, size_t size,
         HTTP::dl_buffer = (uint8_t*) malloc(bytes);
     else
         HTTP::dl_buffer = (uint8_t*) realloc(HTTP::dl_buffer,
-                                  HTTP::dl_buffer_size + bytes);
+                                             HTTP::dl_buffer_size + bytes);
 
     for (unsigned int i = 0; i < bytes; i++) {
         HTTP::dl_buffer[HTTP::dl_buffer_size + i] = ptr[i];
@@ -39,6 +39,16 @@ void HTTP::initialize_cache() {
     struct stat st = { 0 };
     if (stat(cache_dir.c_str(), &st) == -1) {
         mkdir(cache_dir.c_str(), 0755);
+    }
+
+    // TODO: The cache functions use the relative path which includes the board
+    // needs its own subdir in the cache directory... for now everything is
+    // hardcoded to /w/ so we will hardcode it here too, but that needs to
+    // change in the near future
+
+    const std::string board_cache_dir = cache_dir + "/w";
+    if (stat(board_cache_dir.c_str(), &st) == -1) {
+        mkdir(board_cache_dir.c_str(), 0755);
     }
 
     cache_initialized = true;

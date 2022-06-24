@@ -63,3 +63,6 @@ config.h
 
 # Vim
 *.swp
+
+# vscode
+.vscode/

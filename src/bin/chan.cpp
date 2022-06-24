@@ -61,7 +61,8 @@ std::vector<Reply> Chan::get_replies(std::string board, int thread_id) {
     return replies;
 }
 
-Reply::Reply(int no, uint64_t tim, int w, int h, std::string filename, std::string ext, int fsize)
+Reply::Reply(int no, uint64_t tim, int w, int h, std::string filename,
+             std::string ext, int fsize)
     : no(no),
     tim(tim),
     w(w),
