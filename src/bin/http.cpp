@@ -22,7 +22,7 @@ size_t HTTP::write_callback(char* ptr, size_t size,
         HTTP::dl_buffer = (uint8_t*) realloc(HTTP::dl_buffer,
                                   HTTP::dl_buffer_size + bytes);
 
-    for (int i = 0; i < bytes; i++) {
+    for (unsigned int i = 0; i < bytes; i++) {
         HTTP::dl_buffer[HTTP::dl_buffer_size + i] = ptr[i];
     }
     

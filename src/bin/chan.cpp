@@ -20,9 +20,9 @@ std::vector<int> Chan::get_threads(std::string board) {
 
     auto json_response = nlohmann::json::parse(threadlist_json);
 
-    for (int page = 0; page < json_response.size(); page++) {
+    for (unsigned int page = 0; page < json_response.size(); page++) {
         auto cur_page = json_response[page];
-        for (int thread = 0; thread < cur_page["threads"].size(); thread++) {
+        for (unsigned int thread = 0; thread < cur_page["threads"].size(); thread++) {
             auto cur_thread = cur_page["threads"][thread];
             threads.push_back(cur_thread["no"]);
         }
